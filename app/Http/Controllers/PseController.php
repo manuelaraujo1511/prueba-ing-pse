@@ -17,7 +17,7 @@ class PseController extends Controller
   public function responseBanckList()
   {
   	$url = "https://test.placetopay.com/soap/pse/?wsdl";
-  	
+  	$result = "No se pudo obtener la lista de Entidades Financieras, por favor intente más tarde";
   	try{
   		$obj = new SoapClient($url);
   	  		
@@ -34,7 +34,16 @@ class PseController extends Controller
   		$parameter->auth->login = $login;
   		$parameter->auth->tranKey = $tranKey;
   		$parameter->auth->seed = $seed;
-  		$result = $obj->getBankList($parameter);
+
+  		if (!\Cache::has('search')) {
+	      $result = $obj->getBankList($parameter);
+	      //almacenar en cache por un día
+	      \Cache::put('search', $result, 1440);
+	    }
+  		 
+  		
+  		//dd(C);
+  		
 
   		/*
   		+"getBankListResult": {#434 ▼
@@ -44,12 +53,17 @@ class PseController extends Controller
   		       +"bankName": "A continuación seleccione su banco"
   		     }
   		*/
+  		$result = \Cache::get('search');
+  		/*foreach ($result->getBankListResult->item as $key => $v) {
+  			dd($v->bankName);
+  		}*/
+  		
   		return view('welcome',compact('result'));
 
   		
   	}
   	catch(SoapFault $fault) {
-  		echo '<br>'.$fault;
+  		return view('welcome',compact('result'));
   	}
     //return view('web.index');
   }
