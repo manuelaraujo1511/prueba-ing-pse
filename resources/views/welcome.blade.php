@@ -76,7 +76,17 @@
                     @endauth
                 </div>
             @endif
+            
+            <select >
+                <option value="0"></option>
+                @php $selected=null @endphp
+                
+                @foreach ($result as $r)
+                <option value="{{ $r->banckCode }}">{{ $r->bankName }} </option>
+                @endforeach            
 
+            </select>
+            
             <div class="content">
                 <div class="title m-b-md">
                     Laravel

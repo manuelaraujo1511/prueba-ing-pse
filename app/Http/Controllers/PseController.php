@@ -36,8 +36,15 @@ class PseController extends Controller
   		$parameter->auth->seed = $seed;
   		$result = $obj->getBankList($parameter);
 
-
-  		dd($result);
+  		/*
+  		+"getBankListResult": {#434 ▼
+  		   +"item": array:39 [▼
+  		     0 => {#435 ▼
+  		       +"bankCode": "0"
+  		       +"bankName": "A continuación seleccione su banco"
+  		     }
+  		*/
+  		return view('welcome',compact('result'));
 
   		
   	}
