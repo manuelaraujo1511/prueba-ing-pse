@@ -25,7 +25,7 @@ Route::get('/transaction/{id_bank}',function($id_bank){
 
 	$pse_t->bankCode = $id_bank;
 	$pse_t->bankInterface = '0';
-	$pse_t->returnURL = 'http://localhost:8000/pse';
+	$pse_t->returnURL = 'http://localhost:8000/info';
 	$pse_t->reference = '000000001';
 	$pse_t->description = 'prueba de tranasaccion';
 	$pse_t->language = 'ES';
@@ -92,6 +92,8 @@ Route::get('/transaction/{id_bank}',function($id_bank){
 	if($result->createTransactionResult->returnCode=='SUCCESS'){
 		$transaction_id =$result->createTransactionResult->transactionID;
 		DB::table('transactions')->insert(['transaction_id'=> $transaction_id]);
+		\Cache::forget('tran_id');
+		\Cache::put('tran_id', $transaction_id, 10);
 		
 		
 
@@ -104,3 +106,5 @@ Route::get('/transaction/{id_bank}',function($id_bank){
   return Response::json($result);
 	
 });
+
+Route::get('/info','PseController@info_response');
