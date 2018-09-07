@@ -8,6 +8,7 @@
         <title>Prueba</title>
 
         <!-- Fonts -->
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
         <!-- Styles -->
@@ -65,10 +66,16 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            
+        <div style="text-align: center;">
+            <h4 style="color: black;font-weight: bold;">Indique el tipo de cuenta con la que desea realizar el pago.</h4>
             <select>
-                <option value="0"></option>
+                <option value="0">PSE</option>
+            </select>
+            
+            <h4 style="color: black;font-weight: bold;">Seleccione de la lista la entidad financiera con la que desea realizar el pago.</h4>
+            <br>
+            <select id="selectBank">
+                
                 @php $selected=null @endphp
                 
                 @foreach ($result->getBankListResult->item as $key => $r)
@@ -95,5 +102,27 @@
                 </div>
             </div-->
         </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <script type="text/javascript">
+        $('#selectBank').on('change', function() {
+            console.log('cambie: '+ this.value);
+            $.ajax({
+            
+                url: '/transaction/'+this.value,
+                type: 'GET',
+                cache: false,
+                datatype:'JSON',
+                success: function (data) {
+                   
+                   console.table(data)
+                },
+                error : function(xhr,errmsg,err) {
+                    console.log(xhr.status + ": " + xhr.responseText); 
+                }    
+            });
+        });
+    </script>
     </body>
 </html>
