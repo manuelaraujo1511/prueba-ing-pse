@@ -84,9 +84,7 @@ Route::get('/transaction/{id_bank}',function($id_bank){
 	$create = $auth;
 	$create->transaction = $pse_t;
 
-	//dd($soap_client);
 	$result = $soap_client->createTransaction($create);
-	//dd($result);
 	
 	return Response::json($result);
 
