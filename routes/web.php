@@ -13,11 +13,9 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-Route::get('/', function () {
-	return view('welcome');
-});
 
-Route::get('/pse','PseController@responseBanckList');
+
+Route::get('/','PseController@responseBanckList');
 Route::get('/transaction/{id_bank}',function($id_bank){
 	
 	

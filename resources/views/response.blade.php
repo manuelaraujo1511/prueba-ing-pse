@@ -32,7 +32,7 @@
         <script type="text/javascript">
 
             function index_return() {
-                 window.location="/pse";
+                 window.location="/";
             }
         </script>
     </body>
