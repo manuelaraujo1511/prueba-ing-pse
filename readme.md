@@ -27,7 +27,7 @@ https://github.com/manuelaraujo1511/prueba-ing-pse.git
 _Crear la base de datos en phpMyAdmin_
 
 ```
-Data Base = pse
+Base de Datos = pse
 ```
 
 _Entrar al directorio pse-prueba-ing en la consola_
