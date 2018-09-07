@@ -13,6 +13,9 @@
 
     </head>
     <body>
+        <section style="padding-top: 12%; ">
+            
+        </section>
         <div style="text-align: center;">
             <h4 style="color: black;font-weight: bold;">Indique el tipo de cuenta con la que desea realizar el pago.</h4>
             <select>
@@ -34,30 +37,38 @@
                 @endforeach            
 
             </select>
+            <br>
+            <br>
+            <br>
+            <h4 id="load" style="display: none;"> Cargando ...</h4>
             
         </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
-    <script type="text/javascript">
-        $('#selectBank').on('change', function() {
-            
-            $.ajax({
-            
-                url: '/transaction/'+this.value,
-                type: 'GET',
-                cache: false,
-                datatype:'JSON',
-                success: function (data) {
-                   
-                    window.location =data.createTransactionResult.bankURL;    
-                },
-                error : function(xhr,errmsg,err) {
-                    console.log(xhr.status + ": " + xhr.responseText); 
-                }    
+        <script type="text/javascript">
+            $('#selectBank').on('change', function() {
+                
+                $.ajax({
+                
+                    url: '/transaction/'+this.value,
+                    type: 'GET',
+                    cache: false,
+                    datatype:'JSON',
+                    beforeSend: function(){
+                        $("#load").css('display', 'block');
+
+                    },
+                    success: function (data) {
+                       
+                        window.location =data.createTransactionResult.bankURL;    
+                    },
+                    error : function(xhr,errmsg,err) {
+                        console.log(xhr.status + ": " + xhr.responseText); 
+                    }    
+                });
+                //window.location ="/transaction/"+this.value;
             });
-            //window.location ="/transaction/"+this.value;
-        });
-    </script>
+        </script>
     </body>
 </html>

@@ -55,5 +55,39 @@ class PseController extends Controller
   	}
 
   }
+
+  public function info_response(){
+  	/*
+  	{#454 ▼
+  	  +"getTransactionInformationResult": {#455 ▼
+  	    +"transactionID": 1461940579
+  	    +"sessionID": "f2163fa64ce165c20f370eb01024b3d5"
+  	    +"reference": "000000001"
+  	    +"requestDate": "2018-09-06T22:38:24-05:00"
+  	    +"bankProcessDate": "2018-09-06T22:38:50-05:00"
+  	    +"onTest": true
+  	    +"returnCode": "SUCCESS"
+  	    +"trazabilityCode": "1466634"
+  	    +"transactionCycle": 6
+  	    +"transactionState": "OK"
+  	    +"responseCode": 1
+  	    +"responseReasonCode": "00"
+  	    +"responseReasonText": "Aprobada"
+  	  }
+  	}
+
+  	*/
+  	$soap_client = new SoapClient(env('URL_WSDL'));
+  	$tran_info = new StdClass();
+  	$auth = \Cache::get('auth');
+  	$tran_info = $auth;
+  	$tran_info->transactionID = \Cache::get('tran_id');
+  	$result_tran = $soap_client->getTransactionInformation($tran_info);
+  	
+  	$msj= $result_tran->getTransactionInformationResult->responseReasonText;
+  	
+  	return view('response',compact('msj'));
+  	//dd($result_tran);
+  }
  
 }
