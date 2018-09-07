@@ -55,19 +55,5 @@ class PseController extends Controller
   	}
 
   }
-  public function landing_form(Request $request)
-  {
-
-  	$id_bank= $request->id_bank;
-	  \Cache::put('id_bank', $id_bank, 30);
-	 
-  	return view('landing_form');
-  }
-
-  public function form_user_fun()
-  {  	
-	  $id_bank=\Cache::get('id_bank');
-	 
-  	return view('form_user');
-  }
+ 
 }

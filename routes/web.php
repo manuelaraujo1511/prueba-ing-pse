@@ -25,7 +25,7 @@ Route::get('/transaction/{id_bank}',function($id_bank){
 
 	$pse_t->bankCode = $id_bank;
 	$pse_t->bankInterface = '0';
-	$pse_t->returnURL = 'http://localhost:8000/re_transaction';
+	$pse_t->returnURL = 'http://localhost:8000/pse';
 	$pse_t->reference = '000000001';
 	$pse_t->description = 'prueba de tranasaccion';
 	$pse_t->language = 'ES';
@@ -92,22 +92,7 @@ Route::get('/transaction/{id_bank}',function($id_bank){
 	if($result->createTransactionResult->returnCode=='SUCCESS'){
 		$transaction_id =$result->createTransactionResult->transactionID;
 		DB::table('transactions')->insert(['transaction_id'=> $transaction_id]);
-		/*
-		<xsd:element name="getTransactionInformation">
-			<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="auth" type="tns:Authentication"/>
-				<xsd:element name="transactionID" type="xsd:int"/>
-			</xsd:sequence>
-			</xsd:complexType>
-		</xsd:element>
 		
-		$tran_info = new StdClass();
-		$tran_info = $auth;
-		$tran_info->transactionID = $transaction_id;
-		$result_tran = $soap_client->getTransactionInformation($tran_info);
-		dd($result_tran);
-		*/
 		
 
 	}else{
@@ -117,10 +102,5 @@ Route::get('/transaction/{id_bank}',function($id_bank){
 	
   	
   return Response::json($result);
-	//dd($result);
-	//return view('form_user');
-
+	
 });
-
-//Route::get('/transaction/{id_bank}', 'PseController@landing_form');
-Route::get('/form_user', 'PseController@form_user_fun');
