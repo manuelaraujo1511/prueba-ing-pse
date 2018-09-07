@@ -107,7 +107,7 @@
 
     <script type="text/javascript">
         $('#selectBank').on('change', function() {
-            console.log('cambie: '+ this.value);
+            
             $.ajax({
             
                 url: '/transaction/'+this.value,

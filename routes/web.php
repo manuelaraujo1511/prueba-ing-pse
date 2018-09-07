@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -85,7 +87,10 @@ Route::get('/transaction/{id_bank}',function($id_bank){
 	$create->transaction = $pse_t;
 
 	$result = $soap_client->createTransaction($create);
-	
+	if($result->createTransactionResult->returnCode=='SUCCESS'){
+		DB::table('transactions')->insert(['transaction_id'=> $result->createTransactionResult->transactionID]);
+	}
+	//dd($result);
 	return Response::json($result);
 
 });
