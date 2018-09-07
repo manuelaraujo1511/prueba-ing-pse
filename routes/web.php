@@ -86,11 +86,41 @@ Route::get('/transaction/{id_bank}',function($id_bank){
 	$create = $auth;
 	$create->transaction = $pse_t;
 
+	
 	$result = $soap_client->createTransaction($create);
+
 	if($result->createTransactionResult->returnCode=='SUCCESS'){
-		DB::table('transactions')->insert(['transaction_id'=> $result->createTransactionResult->transactionID]);
+		$transaction_id =$result->createTransactionResult->transactionID;
+		DB::table('transactions')->insert(['transaction_id'=> $transaction_id]);
+		/*
+		<xsd:element name="getTransactionInformation">
+			<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="tns:Authentication"/>
+				<xsd:element name="transactionID" type="xsd:int"/>
+			</xsd:sequence>
+			</xsd:complexType>
+		</xsd:element>
+		
+		$tran_info = new StdClass();
+		$tran_info = $auth;
+		$tran_info->transactionID = $transaction_id;
+		$result_tran = $soap_client->getTransactionInformation($tran_info);
+		dd($result_tran);
+		*/
+		
+
+	}else{
+		$result = $result->createTransactionResult->responseReasonText;
+		return view('welcome',compact('result'));
 	}
+	
+  	
+  return Response::json($result);
 	//dd($result);
-	return Response::json($result);
+	//return view('form_user');
 
 });
+
+//Route::get('/transaction/{id_bank}', 'PseController@landing_form');
+Route::get('/form_user', 'PseController@form_user_fun');

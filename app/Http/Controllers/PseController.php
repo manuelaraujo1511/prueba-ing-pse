@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use SoapClient;
 use SoapVar;
 use StdClass;
@@ -53,5 +54,20 @@ class PseController extends Controller
   		return view('welcome',compact('result'));
   	}
 
+  }
+  public function landing_form(Request $request)
+  {
+
+  	$id_bank= $request->id_bank;
+	  \Cache::put('id_bank', $id_bank, 30);
+	 
+  	return view('landing_form');
+  }
+
+  public function form_user_fun()
+  {  	
+	  $id_bank=\Cache::get('id_bank');
+	 
+  	return view('form_user');
   }
 }
