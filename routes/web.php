@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 
 
-Route::get('/','PseController@responseBanckList');
+Route::get('/','PseController@test');
 Route::get('/transaction/{id_bank}',function($id_bank){
 	
 	

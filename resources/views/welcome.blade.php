@@ -28,15 +28,19 @@
                 
                 @php $selected=null @endphp
                 
-                @foreach ($result->getBankListResult->item as $key => $r)
+                {{-- @foreach ($result->getBankListResult->item as $key => $r)
                     @if ($r->bankCode == 0)
                         <option value="{{ $r->bankCode }}" selected>{{ $r->bankName }} </option>
                     @else
                         <option value="{{ $r->bankCode }}" >{{ $r->bankName }} </option>
                     @endif
-                @endforeach            
+                @endforeach  --}} 
 
             </select>
+                @php
+                    
+                    echo  var_dump($request);
+                @endphp          
             <br>
             <br>
             <br>
