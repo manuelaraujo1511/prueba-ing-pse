@@ -1,0 +1,104 @@
+
+Reto 2.
+
+== Importar datos con Sqoop ==
+
+Herramienta:
+1. Cloudera QuickStart CDH 5.13.* https://www.cloudera.com/downloads/quickstart_vms/5-13.html
+2. Sqoop
+3. HDFS
+4. Hive o Impala
+
+
+Materiales a utilizar: 
+1. BD MySQL que se encuentra instalada en la máquina cloudera
+      - string de conexion: jdbc:mysql://quickstart:3306/retail_db
+      - usuario: retail_dba
+      - contraseña: cloudera
+
+== Ejercicios ==
+
+1. Por medio de la herramienta Sqoop, importar las tablas de manera full, que se encuentran en la DB retail_db (mysql) hacia HDFS.
+    R: http://davidiscoding.com/importa-y-exporta-datos-con-sqoop
+    /*
+    sqoop import-all-tables \
+
+    --connect jdbc:mysql://<host>/<db> \
+
+    --username <usr> --password <pwd>
+    */
+
+   - Guardar los datos en formato Avro. 
+   R:
+   /*
+   sqoop import --table <table> \
+
+    --connect jdbc:mysql://<host>/<db> \
+
+    --username <usr> --password <pwd> \
+
+    --as-avrodatafile
+   */
+   
+   - Guardar los datos en formato Parquet.
+   R:
+   /*
+   sqoop import --table <table> \
+
+    --connect jdbc:mysql://<host>/<db> \
+
+    --username <usr> --password <pwd> \
+
+    --as-parquetfile
+    */
+
+   Explorar el número de mappers para explorar cuantos archivos se generan con cada variación. Se debe tener en cuenta que, si no existe un
+   campo numerico no nulo para guiar a los mapper que pedazo del dataset tomar, se debe utilizar un solo mapper.
+   ejemplo:
+   sqoop import \
+   --connect <string de conexion> \
+   --username <usuario> \
+   --password <password> \
+   --table <TABLA> \
+   --as-avrodatafile
+   --target-dir /<DIRECTORIO HDFS>
+
+2. Por medio de la herramienta Sqoop, importar las tablas de la DB retail_db (mysql) a partir de un query, y entregarlo en HDFS con formato 
+   texto plano, para visualizar de facil manera, si los datos son entregados correctamente. El query a utilizar es de su autoría. Se puede utilizar
+   la función eval de Sqoop para probar el query antes de hacer la ingesta de los datos.
+   ejemplo:
+      sqoop eval \
+      --connect <string de conexion> \
+      --username <usuario> \
+      --password <password> \
+      -e "QUERY"
+   Explorar tambien, la posibilidad de hacer un mapeo de los campos durante la ingesta de los datos, utilizando la opción --map-column-java, 
+   solo se pueden utilizar tipos de datos primitivos (Integer, Long, Double, Float, String, Boolean)
+
+3. Por medio de la herramienta Sqoop, importar de manera incremental (de manera append) un dataset de una de las tablas retail_db (mysql) hacia HDFS,
+   a partir de:
+   - Un last value, utilizando un campo no nulo de la tabla, que permita traer los datos menores a ese last value y que se pueda traer mas datos
+     a partir de otro last value.
+   - Una consulta, que permita importar un dataset y que se pueda ejecutar nuevamente para traer mas datos.
+   ejemplo:
+      sqoop import \
+      --connect <string de conexion> \
+      --username <usuario> \
+      --password <password> \
+      --incremental append \
+      --null-non-string '\\N' \
+      --table accounts \
+      --target-dir /<DIRECTORIO HDFS> \
+      --check-column acct_num \
+      --last-value <largest_num>
+
+4. Utilizar la herramienta Sqoop, para traer una de las tablas de la DB retail_db (mysql), y crear una tabla en Hive, utilizando la opción --hive-import.
+   Guardar en formato parquet.
+
+5. Utilizar la herramienta Sqoop, para traer una de las tablas de la DB retail_db (mysql), y crear una tabla en hive o impala. Se debe almacenar en avro.
+   Se debe tener en cuenta que sqoop no permite crear la tabla en Hive, si se guarda en formato avro. Por lo que se deben depositar los avros en una ruta
+   HDFS temporal, crear la tabla Hive manualmente (sea utilizando el avroSchema generado, o definiendo los campos de manera manual), y luego utilizar HDFS
+   para mover los campos a la ruta donde definida para depositar los datos en la creación de la tabla Hive.
+
+6. Hacer un script en Bash o Python, que permita hacer el ejercicio 5. de manera automatica, y que se pueda parametrizar que tabla se va a traer, si es 
+   Full o incremental, y en caso de ser incremental que elegir un campo y un last value.
